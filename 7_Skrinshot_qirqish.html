@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="uz"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skrinshot qirqish</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+@page{size:A4;margin:0}
+*{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+:root{--bg:#08130f;--surface:#0f1f19;--surface2:#152a22;--line:#1f3a2f;--fg:#eef5f1;--muted:#94ada1;--accent:#34d399;--ink:#04140d;--warn:#f5c66b;--red:#f28b82;--mark:#f59e0b;color-scheme:dark}
+html,body{margin:0;padding:0;background:var(--bg)}
+body{font-family:"Segoe UI",system-ui,-apple-system,sans-serif;color:var(--fg);font-size:11.5pt;line-height:1.45}
+.page{width:210mm;height:297mm;overflow:hidden;position:relative;background:var(--bg);page-break-after:always;break-after:page;display:flex;flex-direction:column}
+.page:last-child{page-break-after:auto;break-after:auto}
+.bar{flex:none;height:15mm;display:flex;align-items:center;justify-content:space-between;padding:0 14mm;background:var(--surface);border-bottom:.3mm solid var(--line)}
+.bar b{font-size:11pt;display:flex;align-items:center;gap:2.5mm}
+.bar b::before{content:"";width:2.4mm;height:2.4mm;border-radius:50%;background:var(--accent)}
+.bar span{font-size:10pt;color:var(--muted)}
+.body{flex:1;padding:9mm 14mm 10mm;display:flex;flex-direction:column;gap:7mm}
+.card{background:var(--surface);border:.3mm solid var(--line);border-radius:6mm;padding:6.5mm 7mm}
+.sh{display:flex;align-items:center;gap:4mm}
+.sh h3{flex:1}
+.num{flex:none;width:11mm;height:11mm;border-radius:50%;background:var(--accent);color:var(--ink);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:17pt}
+.sh h3{margin:0;font-size:16pt;line-height:1.2;font-weight:700;letter-spacing:-.2pt}
+.a{color:var(--accent)}
+.cb{margin-top:5mm}
+.tip,.warn,.ok{margin-top:4mm;border-radius:3mm;padding:2.8mm 4mm;font-size:10.5pt;display:flex;gap:3mm;align-items:flex-start}
+.tip{background:rgba(245,198,107,.12);color:#f7dca3}
+.warn{background:rgba(242,139,130,.13);color:#f6b8b2}
+.ok{background:rgba(52,211,153,.12);color:#a6ecd0}
+.tip::before,.warn::before,.ok::before{content:"";flex:none;width:2mm;height:2mm;border-radius:50%;margin-top:1.7mm}
+.tip::before{background:var(--warn)}.warn::before{background:var(--red)}.ok::before{background:var(--accent)}
+.flow{background:var(--surface2);border-radius:4mm;padding:5mm 6mm;font-size:12pt;line-height:2.1}
+.flow .ar{color:var(--accent);margin:0 1.5mm}
+.chip{display:inline-block;line-height:1.3;padding:1.3mm 4mm;border-radius:99px;background:var(--accent);color:var(--ink);font-weight:700;font-size:10.5pt;vertical-align:middle}
+.chip.dk{background:#eef5f1;color:#0b1a14}
+.chip.ol{background:transparent;border:.35mm solid var(--line);color:var(--fg)}
+kbd{display:inline-block;font-family:"Segoe UI",sans-serif;font-weight:700;font-size:11pt;background:#1d3a2f;border:.3mm solid #2b5243;border-bottom-width:1mm;border-radius:2mm;padding:.8mm 3mm;color:var(--fg);line-height:1.3;vertical-align:middle}
+kbd.big{font-size:20pt;padding:2mm 6mm;border-radius:3mm}
+.plus{font-size:18pt;color:var(--muted);margin:0 2mm;vertical-align:middle}
+.code{background:#050d0a;border:.3mm solid var(--line);border-radius:4mm;overflow:hidden}
+.code .lb{display:flex;justify-content:space-between;align-items:center;gap:3mm;padding:2.2mm 4.5mm;border-bottom:.3mm solid var(--line);font-size:9pt;color:var(--muted);font-weight:600;letter-spacing:.3pt}
+.code .lb i{font-style:normal;color:var(--accent)}
+.code pre{margin:0;padding:3.5mm 4.5mm;font-family:Consolas,"Cascadia Mono",monospace;font-size:9.6pt;line-height:1.5;white-space:pre-wrap;word-break:break-word;color:var(--fg)}
+.ph{color:var(--warn)}
+/* copy buttons (web only) */
+.cpy{font:inherit;font-size:9.5pt;font-weight:700;border:0;cursor:pointer;background:var(--accent);color:var(--ink);padding:1.4mm 3.8mm;border-radius:99px;white-space:nowrap;vertical-align:middle;line-height:1.3;flex:none}
+.cpy.sm{font-size:8.5pt;padding:1mm 3mm}
+.cpy.done{background:#eef5f1;color:#0b1a14}
+.cpy:focus-visible{outline:2px solid #eef5f1;outline-offset:2px}
+/* field rows to copy */
+.fr{display:flex;align-items:center;gap:3mm;background:var(--surface2);border-radius:3mm;padding:2.6mm 4mm;margin-top:2.5mm;font-size:10.5pt}
+.fr .k{color:var(--muted);flex:none;min-width:24mm}
+.fr .v{flex:1;font-weight:600;min-width:0}
+/* light screenshot mockups */
+.scr{background:#fff;color:#1f1f1f;border-radius:3.5mm;overflow:hidden;font-family:"Segoe UI",Arial,sans-serif;font-size:10pt;box-shadow:0 2mm 6mm rgba(0,0,0,.35)}
+.scr .top{display:flex;align-items:center;gap:3mm;padding:2.2mm 3.5mm;background:#eef1f0;border-bottom:.25mm solid #dde3e0}
+.scr .dots{display:flex;gap:1.3mm}.scr .dots i{width:2.2mm;height:2.2mm;border-radius:50%;background:#c9d1cd;display:block}
+.scr .url{flex:1;background:#fff;border-radius:99px;padding:1mm 4mm;font-size:9pt;color:#444}
+.scr .in{padding:6mm 7mm;position:relative}
+.gcard{display:flex;gap:8mm}
+.gcard .l{flex:1}.gcard .r{flex:1.2;display:flex;flex-direction:column;gap:3.5mm}
+.G{font-weight:700;font-size:16pt;letter-spacing:-.5pt}
+.G b:nth-child(1){color:#4285f4}.G b:nth-child(2){color:#ea4335}.G b:nth-child(3){color:#fbbc05}.G b:nth-child(4){color:#4285f4}.G b:nth-child(5){color:#34a853}.G b:nth-child(6){color:#ea4335}
+.gh{font-size:17pt;margin:2mm 0 1mm;font-weight:400}
+.gs{font-size:9pt;color:#555}
+.fld{border:.3mm solid #8a8f8c;border-radius:1.5mm;padding:2.6mm 3mm;position:relative;font-size:10pt;background:#fff}
+.fld small{position:absolute;top:-2mm;left:2.5mm;background:#fff;padding:0 1mm;font-size:7.5pt;color:#555}
+.row{display:flex;gap:2.5mm}.row>*{flex:1}
+.gbtn{display:inline-block;background:#0b57d0;color:#fff;border-radius:99px;padding:1.8mm 5mm;font-weight:600;font-size:9.5pt}
+.tbtn{display:inline-block;color:#0b57d0;font-weight:600;font-size:9.5pt;padding:1.8mm 3mm}
+.blk{display:inline-block;background:#1f1f1f;color:#fff;border-radius:2mm;padding:2mm 6mm;font-weight:600;font-size:9.5pt}
+.lt{display:inline-block;background:#f1f3f2;border:.25mm solid #d6dbd8;border-radius:2mm;padding:2mm 5mm;font-weight:600;font-size:9.5pt;color:#1f1f1f}
+.right{display:flex;justify-content:flex-end;align-items:center;gap:2mm}
+.menu{background:#fff;border-radius:2mm;box-shadow:0 1mm 4mm rgba(0,0,0,.2);padding:1.5mm 0;font-size:9.5pt;width:52mm}
+.menu div{padding:1.8mm 4mm}
+.mk{position:relative;display:inline-block;box-shadow:0 0 0 .7mm var(--mark);border-radius:1.6mm}
+.mk.blk2{display:block}
+.mk::after{content:attr(data-n);position:absolute;top:-3.4mm;left:-3.4mm;width:5.2mm;height:5.2mm;background:var(--mark);color:#1b1100;font-weight:900;font-size:8.5pt;display:flex;align-items:center;justify-content:center;border-radius:1.2mm;font-family:"Segoe UI",sans-serif}
+.tile{display:flex;flex-direction:column;align-items:center;gap:1.5mm;width:19mm;font-size:8pt;color:#333;text-align:center}
+.tile i{width:11mm;height:11mm;border-radius:50%;background:#eef1f0;display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:700;font-size:12pt}
+.tile img{width:6.5mm;height:6.5mm;border-radius:1.4mm}
+.sms{display:inline-block;background:#e8f0fe;border-radius:3mm 3mm 3mm 1mm;padding:3mm 5mm;font-size:10pt;color:#1f1f1f}
+.sms b{display:block;font-size:20pt;letter-spacing:2pt;color:#0b57d0}
+.dotm{padding:0 1.5mm;background:#fff}
+/* AI icon tiles on dark */
+.aig{display:grid;grid-template-columns:repeat(3,1fr);gap:3.5mm}
+.ait{display:flex;align-items:center;gap:3mm;background:var(--surface);border:.3mm solid var(--line);border-radius:4mm;padding:3mm 3.5mm;min-width:0;color:var(--fg);text-decoration:none}
+.ait img{width:10mm;height:10mm;border-radius:2.5mm;background:#fff;padding:1.2mm;flex:none}
+.ait div{flex:1;min-width:0}
+.ait b{display:block;font-size:11pt}
+.ait code{display:block;font-family:Consolas,monospace;font-size:8.3pt;color:var(--accent);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* cover */
+.cover{background:radial-gradient(120mm 120mm at 80% 8%,rgba(52,211,153,.28),transparent 70%),radial-gradient(140mm 140mm at 0% 100%,rgba(16,120,80,.35),transparent 70%),linear-gradient(170deg,#0c2219,#06100c);align-items:center;justify-content:center;text-align:center;padding:0 18mm}
+.pill{display:inline-block;border:.3mm solid rgba(255,255,255,.28);border-radius:99px;padding:1.5mm 5mm;font-size:9.5pt;letter-spacing:1.2pt;color:#cfe3da}
+.logo{margin:9mm auto 9mm;display:inline-flex;align-items:center;gap:4mm;background:rgba(255,255,255,.06);border:.3mm solid rgba(255,255,255,.14);border-radius:7mm;padding:6mm 11mm;font-size:30pt;font-weight:700;letter-spacing:-.6pt}
+.logo .ic{width:14mm;height:14mm;border-radius:4mm;background:var(--accent);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:20pt;font-weight:900;overflow:hidden}
+.logo .ic img{width:14mm;height:14mm}
+.cover h1{font-size:34pt;line-height:1.08;margin:0;font-weight:900;letter-spacing:-.8pt}
+.cover .sub{margin-top:5mm;font-size:13pt;color:#b5cdc2}
+.chips{margin-top:8mm;display:flex;gap:3mm;justify-content:center;flex-wrap:wrap}
+.chips span{background:#eef5f1;color:#0b1a14;border-radius:99px;padding:2mm 5.5mm;font-weight:700;font-size:11pt}
+.need{margin-top:8mm;font-size:11pt;color:#b5cdc2}
+.series{position:absolute;bottom:12mm;left:0;right:0;font-size:9pt;color:#5f8273;letter-spacing:1pt}
+/* final */
+.fin .body{padding-top:18mm}
+.big-ok{width:22mm;height:22mm;border-radius:50%;background:var(--accent);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:30pt;font-weight:900;margin:0 auto}
+.fin h2{text-align:center;font-size:26pt;margin:6mm 0 0;font-weight:800;color:var(--accent);letter-spacing:-.5pt}
+.fin .lead{text-align:center;color:var(--muted);margin:2mm 0 2mm;font-size:12pt}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:4mm}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4mm}
+.mini{background:var(--surface);border:.3mm solid var(--line);border-radius:4.5mm;padding:5mm;font-size:11pt}
+.mini .e{font-size:16pt;display:block;margin-bottom:2mm}
+.mini.r{background:rgba(242,139,130,.1);border-color:rgba(242,139,130,.25);text-align:center;font-weight:600}
+.write{border:.45mm dashed var(--accent);border-radius:5mm;padding:6mm 7mm}
+.write h4{margin:0 0 4mm;color:var(--accent);font-size:13pt}
+.write .ln{display:flex;gap:3mm;margin-top:5mm;font-size:11.5pt}
+.write .ln i{flex:1;border-bottom:.35mm solid #3c5c4f}
+.note{background:var(--surface2);border-radius:5mm;padding:5mm 6mm;font-size:11pt}
+.note b{display:block;margin-bottom:1.5mm}
+.note ul{margin:0;padding-left:5mm}.note li{margin:1mm 0}
+.lnk{display:flex;align-items:center;gap:3mm;background:var(--surface2);border:.3mm solid var(--line);border-radius:3.5mm;padding:2.4mm 3.5mm;color:var(--fg);text-decoration:none;font-size:10.5pt;min-width:0}
+.lnk img{width:7mm;height:7mm;border-radius:1.6mm;background:#fff;padding:.8mm;flex:none}
+.lnk div{flex:1;min-width:0}
+.lnk code{display:block;margin-top:.3mm;font-family:Consolas,monospace;color:var(--accent);font-size:9pt;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sect{font-size:13pt;font-weight:700;margin:2mm 0 0;display:flex;align-items:center;gap:2.5mm}
+.sect::before{content:"";width:2.4mm;height:2.4mm;border-radius:50%;background:var(--accent)}
+
+body{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.page{width:auto;max-width:860px;height:auto;margin:0 auto 22px;overflow:visible;border-radius:22px;border:1px solid var(--line)}
+.page:first-of-type{margin-top:16px}
+.bar{border-radius:22px 22px 0 0;padding:0 24px}
+.body{padding:22px clamp(14px,3vw,30px) 26px;gap:20px}
+.cover{padding:64px 20px 72px;position:relative}
+.series{position:static;margin-top:36px}
+.fin .body{padding-top:40px}
+.scr{overflow-x:auto}
+.foot-nav{max-width:860px;margin:0 auto 40px;text-align:center;color:var(--muted);font-size:13px}
+@media (max-width:640px){
+ .gcard{flex-direction:column;gap:4mm}
+ .grid2,.grid3,.aig{grid-template-columns:1fr}
+ .sh{flex-wrap:wrap}
+ .sh h3{font-size:14pt;min-width:60%}
+ .cover h1{font-size:25pt}
+ .logo{font-size:22pt;padding:5mm 7mm}
+ .fr{flex-wrap:wrap}.fr .k{min-width:0;width:100%}
+ kbd.big{font-size:15pt}
+}
+</style>
+<section class="page cover"><div>
+<div class="pill">YO‘RIQNOMA</div><br>
+<div class="logo"><div class="ic">✂</div>Skrinshot</div>
+<h1>Ekrandan <span class="a">istalgan joyni</span><br>qirqib oling</h1><div class="sub">Qo‘shimcha dasturisiz, Windows’ning o‘zida</div>
+<div class="chips"><span>✓ 7 ta qadam</span><span>✓ Rasmlar bilan</span><span>✓ 1 daqiqa</span></div><div class="need">Kerak: Windows 10 yoki 11 kompyuter</div></div>
+<div class="series">YO‘RIQNOMALAR TO‘PLAMI · 7 / 7</div></section><section class="page"><div class="bar"><b>Skrinshot</b><span>1–2-qadam</span></div><div class="body"><div class="card"><div class="sh"><div class="num">1</div><h3>Uchta tugmani birga bosing</h3></div><div class="cb flow"><div style="text-align:center"><kbd class="big">⊞ Win</kbd><span class="plus">+</span><kbd class="big">Shift</kbd><span class="plus">+</span><kbd class="big">S</kbd></div></div><div class="tip"><div>Ekran biroz xiralashadi va tepada kichik panel chiqadi. Bu normal.</div></div></div><div class="card"><div class="sh"><div class="num">2</div><h3>Tepadagi paneldan <span class="a">to‘rtburchak</span> rejimini tanlang</h3></div><div class="cb scr"><div class="top"><div class="dots"><i></i><i></i><i></i></div><div class="url">Ekran tepasida</div></div><div class="in"><div style="background:#2b2b2b;border-radius:2mm;padding:3mm;display:flex;justify-content:center;gap:4mm;color:#fff;font-size:9pt;flex-wrap:wrap"><span class="mk" data-n="1"><span style="padding:1mm 3mm;background:#444;border-radius:1.5mm">▭ To‘rtburchak</span></span><span style="padding:1mm 3mm">✎ Erkin shakl</span><span style="padding:1mm 3mm">▢ Oyna</span><span style="padding:1mm 3mm">⛶ Butun ekran</span><span style="padding:1mm 3mm">✕</span></div></div></div><div class="tip"><div>Odatda to‘rtburchak o‘zi tanlangan bo‘ladi. Shunchaki 3-qadamga o‘ting.</div></div></div></div></section><section class="page"><div class="bar"><b>Skrinshot</b><span>3–4-qadam</span></div><div class="body"><div class="card"><div class="sh"><div class="num">3</div><h3>Kerakli joyni sichqoncha bilan <span class="a">tortib belgilang</span></h3></div><div class="cb scr"><div class="in"><div style="position:relative;height:42mm;background:linear-gradient(#cfd6d3,#cfd6d3) 0 0/100% 4mm no-repeat,#e4e9e7;border-radius:2mm;overflow:hidden"><div style="position:absolute;inset:0;background:rgba(0,0,0,.35)"></div><div style="position:absolute;left:22%;top:22%;width:50%;height:55%;background:#fff;border:.5mm solid #0b57d0;padding:3mm;font-size:9pt">Qirqmoqchi bo‘lgan joy<br><span class="gs">shu yer saqlanadi</span></div><div style="position:absolute;left:71%;top:74%;font-size:14pt">✛</div></div></div></div><div class="cb flow">Burchakdan bosib turing <span class="ar">→</span> sudrang <span class="ar">→</span> qo‘yib yuboring</div></div><div class="card"><div class="sh"><div class="num">4</div><h3>Rasm nusxalandi: kerakli joyga <span class="a">qo‘ying</span></h3></div><div class="cb flow">Telegram, Claude yoki Word’ni oching <span class="ar">→</span> yozish joyini bosing <span class="ar">→</span> <kbd>Ctrl</kbd> + <kbd>V</kbd></div><div class="tip"><div>Rasm hali faylga saqlanmagan, faqat xotirada turibdi. Saqlash 5-qadamda.</div></div></div></div></section><section class="page"><div class="bar"><b>Skrinshot</b><span>5–6-qadam</span></div><div class="body"><div class="card"><div class="sh"><div class="num">5</div><h3>Faylga saqlash: chiqqan <span class="a">xabarni</span> bosing</h3></div><div class="cb scr"><div class="top"><div class="dots"><i></i><i></i><i></i></div><div class="url">Ekranning o‘ng past burchagi</div></div><div class="in"><div style="display:flex;justify-content:flex-end"><div style="width:62%;background:#2b2b2b;color:#fff;border-radius:2mm;padding:3mm;font-size:9pt"><span class="mk blk2" data-n="1"><div style="padding:1mm"><b>Qirqma nusxalandi</b><div style="color:#bbb">Belgilash va ulashish uchun bosing</div></div></span></div></div><div style="margin-top:4mm;display:flex;gap:3mm;align-items:center;font-size:9pt">Ochilgan oynada <span class="mk" data-n="2"><span class=lt>💾 Saqlash</span></span> <span class="gs">yoki Ctrl + S</span></div></div></div><div class="ok"><div>Butun ekranni darhol faylga saqlash: <b>Win + PrtSc</b>. Rasm “Rasmlar → Screenshots” papkasiga tushadi.</div></div></div><div class="card"><div class="sh"><div class="num">6</div><h3>Sozlama: <span class="a">PrtSc</span> tugmasini qirqishga ulash</h3></div><div class="cb scr"><div class="top"><div class="dots"><i></i><i></i><i></i></div><div class="url">Win + R oynasi</div></div><div class="in"><div style="width:70%;border:.25mm solid #ccc;border-radius:1.5mm;padding:4mm;font-size:9.5pt"><b>▭ Ishga tushirish</b><div style="margin:3mm 0 2mm">Ochish:</div><span class="mk blk2" data-n="1"><div class="fld">ms-settings:easeofaccess-keyboard</div></span><div class="right" style="margin-top:3mm"><span class="mk" data-n="2"><span class=lt>OK</span></span></div></div></div></div><div class="cb flow"><kbd>Win</kbd> + <kbd>R</kbd> <span class="ar">→</span> pastdagi matnni qo‘ying <span class="ar">→</span> <kbd>Enter</kbd></div><div class="cb code"><div class="lb"><span>Win + R ga qo‘ying</span><button class="cpy sm">Nusxalash</button></div><pre>ms-settings:easeofaccess-keyboard</pre></div></div></div></section><section class="page"><div class="bar"><b>Skrinshot</b><span>7-qadam</span></div><div class="body"><div class="card"><div class="sh"><div class="num">7</div><h3><span class="a">“Print Screen”</span> sozlamasini yoqing</h3></div><div class="cb scr"><div class="top"><div class="dots"><i></i><i></i><i></i></div><div class="url">Parametrlar → Maxsus imkoniyatlar → Klaviatura</div></div><div class="in"><div style="font-size:13pt;margin-bottom:4mm">Klaviatura</div><div style="border:.25mm solid #e1e5e3;border-radius:2mm;padding:4mm;font-size:9.5pt"><b>Print Screen tugmasi</b><div class="gs" style="margin:1.5mm 0 3mm">PrtScn tugmasi bilan ekranni qirqishni ochish</div><span class="mk" data-n="1"><span style="display:inline-flex;align-items:center;gap:2mm;padding:1mm 2mm"><span style="width:10mm;height:5mm;border-radius:99px;background:#0b57d0;position:relative;display:inline-block"><span style="position:absolute;right:.8mm;top:.8mm;width:3.4mm;height:3.4mm;border-radius:50%;background:#fff"></span></span>Yoqilgan</span></span></div></div></div><div class="cb flow">Tugmani <b>Yoqilgan</b> holatiga o‘tkazing <span class="ar">→</span> kompyuterni qayta ishga tushiring <span class="ar">→</span> <kbd>PrtSc</kbd> bosib sinang</div><div class="tip"><div>Windows 10: “Maxsus imkoniyatlar” (Ease of Access) → Klaviatura. Windows 11: “Accessibility” → Klaviatura.</div></div></div></div></section><section class="page fin"><div class="body"><div class="big-ok">✓</div><h2>Tayyor! Endi tez qirqasiz</h2><div class="lead">Eng kerakli tugmalar bitta joyda</div><div class="grid2"><div class="mini"><div style="margin-bottom:2mm"><kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd></div><div style="color:var(--muted);font-size:10.5pt">Istalgan joyni qirqish</div></div><div class="mini"><div style="margin-bottom:2mm"><kbd>PrtSc</kbd></div><div style="color:var(--muted);font-size:10.5pt">Sozlamadan keyin: qirqish bitta tugmada</div></div><div class="mini"><div style="margin-bottom:2mm"><kbd>Ctrl</kbd> + <kbd>V</kbd></div><div style="color:var(--muted);font-size:10.5pt">Qirqilgan rasmni qo‘yish</div></div><div class="mini"><div style="margin-bottom:2mm"><kbd>Win</kbd> + <kbd>PrtSc</kbd></div><div style="color:var(--muted);font-size:10.5pt">Butun ekran, avtomatik faylga</div></div><div class="mini"><div style="margin-bottom:2mm"><kbd>Alt</kbd> + <kbd>PrtSc</kbd></div><div style="color:var(--muted);font-size:10.5pt">Faqat ochiq oyna</div></div><div class="mini"><div style="margin-bottom:2mm"><kbd>Win</kbd> + <kbd>V</kbd></div><div style="color:var(--muted);font-size:10.5pt">Oxirgi nusxalar tarixi</div></div></div><div class="note"><b>Bilib qo‘ying:</b><ul><li>Skrinshotda parol, karta raqami yoki SMS kod ko‘rinmasin.</li><li>Telegram’ga yuborishdan oldin rasmni tekshiring.</li></ul></div></div></section>
+
+<script>
+document.addEventListener('click', function (e) {
+  var b = e.target.closest('.cpy');
+  if (!b) return;
+  var t = b.getAttribute('data-copy');
+  var src = null;
+  if (t === null) { src = b.closest('.code').querySelector('pre'); t = src.innerText; }
+  var label = b.getAttribute('data-label') || b.textContent;
+  b.setAttribute('data-label', label);
+  function ok() { b.textContent = 'Nusxalandi ✓'; b.classList.add('done'); setTimeout(function () { b.textContent = label; b.classList.remove('done'); }, 1500); }
+  function fail() {
+    var el = src || b.parentElement;
+    try { var r = document.createRange(); r.selectNodeContents(el); var s = getSelection(); s.removeAllRanges(); s.addRange(r); } catch (x) {}
+    b.textContent = 'Ctrl+C bosing'; setTimeout(function () { b.textContent = label; }, 2000);
+  }
+  try { navigator.clipboard.writeText(t).then(ok, fail); } catch (x) { fail(); }
+});
+</script>
+
+</html>
