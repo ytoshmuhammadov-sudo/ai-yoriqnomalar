@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="uz"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI xodim yasash va o‘qitish</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+@page{size:A4;margin:0}
+*{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+:root{--bg:#08130f;--surface:#0f1f19;--surface2:#152a22;--line:#1f3a2f;--fg:#eef5f1;--muted:#94ada1;--accent:#34d399;--ink:#04140d;--warn:#f5c66b;--red:#f28b82;--mark:#f59e0b;color-scheme:dark}
+html,body{margin:0;padding:0;background:var(--bg)}
+body{font-family:"Segoe UI",system-ui,-apple-system,sans-serif;color:var(--fg);font-size:11.5pt;line-height:1.45}
+.page{width:210mm;height:297mm;overflow:hidden;position:relative;background:var(--bg);page-break-after:always;break-after:page;display:flex;flex-direction:column}
+.page:last-child{page-break-after:auto;break-after:auto}
+.bar{flex:none;height:15mm;display:flex;align-items:center;justify-content:space-between;padding:0 14mm;background:var(--surface);border-bottom:.3mm solid var(--line)}
+.bar b{font-size:11pt;display:flex;align-items:center;gap:2.5mm}
+.bar b::before{content:"";width:2.4mm;height:2.4mm;border-radius:50%;background:var(--accent)}
+.bar span{font-size:10pt;color:var(--muted)}
+.body{flex:1;padding:9mm 14mm 10mm;display:flex;flex-direction:column;gap:7mm}
+.card{background:var(--surface);border:.3mm solid var(--line);border-radius:6mm;padding:6.5mm 7mm}
+.sh{display:flex;align-items:center;gap:4mm}
+.sh h3{flex:1}
+.num{flex:none;width:11mm;height:11mm;border-radius:50%;background:var(--accent);color:var(--ink);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:17pt}
+.sh h3{margin:0;font-size:16pt;line-height:1.2;font-weight:700;letter-spacing:-.2pt}
+.a{color:var(--accent)}
+.cb{margin-top:5mm}
+.tip,.warn,.ok{margin-top:4mm;border-radius:3mm;padding:2.8mm 4mm;font-size:10.5pt;display:flex;gap:3mm;align-items:flex-start}
+.tip{background:rgba(245,198,107,.12);color:#f7dca3}
+.warn{background:rgba(242,139,130,.13);color:#f6b8b2}
+.ok{background:rgba(52,211,153,.12);color:#a6ecd0}
+.tip::before,.warn::before,.ok::before{content:"";flex:none;width:2mm;height:2mm;border-radius:50%;margin-top:1.7mm}
+.tip::before{background:var(--warn)}.warn::before{background:var(--red)}.ok::before{background:var(--accent)}
+.flow{background:var(--surface2);border-radius:4mm;padding:5mm 6mm;font-size:12pt;line-height:2.1}
+.flow .ar{color:var(--accent);margin:0 1.5mm}
+.chip{display:inline-block;line-height:1.3;padding:1.3mm 4mm;border-radius:99px;background:var(--accent);color:var(--ink);font-weight:700;font-size:10.5pt;vertical-align:middle}
+.chip.dk{background:#eef5f1;color:#0b1a14}
+.chip.ol{background:transparent;border:.35mm solid var(--line);color:var(--fg)}
+kbd{display:inline-block;font-family:"Segoe UI",sans-serif;font-weight:700;font-size:11pt;background:#1d3a2f;border:.3mm solid #2b5243;border-bottom-width:1mm;border-radius:2mm;padding:.8mm 3mm;color:var(--fg);line-height:1.3;vertical-align:middle}
+kbd.big{font-size:20pt;padding:2mm 6mm;border-radius:3mm}
+.plus{font-size:18pt;color:var(--muted);margin:0 2mm;vertical-align:middle}
+.code{background:#050d0a;border:.3mm solid var(--line);border-radius:4mm;overflow:hidden}
+.code .lb{display:flex;justify-content:space-between;align-items:center;gap:3mm;padding:2.2mm 4.5mm;border-bottom:.3mm solid var(--line);font-size:9pt;color:var(--muted);font-weight:600;letter-spacing:.3pt}
+.code .lb i{font-style:normal;color:var(--accent)}
+.code pre{margin:0;padding:3.5mm 4.5mm;font-family:Consolas,"Cascadia Mono",monospace;font-size:9.6pt;line-height:1.5;white-space:pre-wrap;word-break:break-word;color:var(--fg)}
+.ph{color:var(--warn)}
+/* copy buttons (web only) */
+.cpy{font:inherit;font-size:9.5pt;font-weight:700;border:0;cursor:pointer;background:var(--accent);color:var(--ink);padding:1.4mm 3.8mm;border-radius:99px;white-space:nowrap;vertical-align:middle;line-height:1.3;flex:none}
+.cpy.sm{font-size:8.5pt;padding:1mm 3mm}
+.cpy.done{background:#eef5f1;color:#0b1a14}
+.cpy:focus-visible{outline:2px solid #eef5f1;outline-offset:2px}
+/* field rows to copy */
+.fr{display:flex;align-items:center;gap:3mm;background:var(--surface2);border-radius:3mm;padding:2.6mm 4mm;margin-top:2.5mm;font-size:10.5pt}
+.fr .k{color:var(--muted);flex:none;min-width:24mm}
+.fr .v{flex:1;font-weight:600;min-width:0}
+/* light screenshot mockups */
+.scr{background:#fff;color:#1f1f1f;border-radius:3.5mm;overflow:hidden;font-family:"Segoe UI",Arial,sans-serif;font-size:10pt;box-shadow:0 2mm 6mm rgba(0,0,0,.35)}
+.scr .top{display:flex;align-items:center;gap:3mm;padding:2.2mm 3.5mm;background:#eef1f0;border-bottom:.25mm solid #dde3e0}
+.scr .dots{display:flex;gap:1.3mm}.scr .dots i{width:2.2mm;height:2.2mm;border-radius:50%;background:#c9d1cd;display:block}
+.scr .url{flex:1;background:#fff;border-radius:99px;padding:1mm 4mm;font-size:9pt;color:#444}
+.scr .in{padding:6mm 7mm;position:relative}
+.gcard{display:flex;gap:8mm}
+.gcard .l{flex:1}.gcard .r{flex:1.2;display:flex;flex-direction:column;gap:3.5mm}
+.G{font-weight:700;font-size:16pt;letter-spacing:-.5pt}
+.G b:nth-child(1){color:#4285f4}.G b:nth-child(2){color:#ea4335}.G b:nth-child(3){color:#fbbc05}.G b:nth-child(4){color:#4285f4}.G b:nth-child(5){color:#34a853}.G b:nth-child(6){color:#ea4335}
+.gh{font-size:17pt;margin:2mm 0 1mm;font-weight:400}
+.gs{font-size:9pt;color:#555}
+.fld{border:.3mm solid #8a8f8c;border-radius:1.5mm;padding:2.6mm 3mm;position:relative;font-size:10pt;background:#fff}
+.fld small{position:absolute;top:-2mm;left:2.5mm;background:#fff;padding:0 1mm;font-size:7.5pt;color:#555}
+.row{display:flex;gap:2.5mm}.row>*{flex:1}
+.gbtn{display:inline-block;background:#0b57d0;color:#fff;border-radius:99px;padding:1.8mm 5mm;font-weight:600;font-size:9.5pt}
+.tbtn{display:inline-block;color:#0b57d0;font-weight:600;font-size:9.5pt;padding:1.8mm 3mm}
+.blk{display:inline-block;background:#1f1f1f;color:#fff;border-radius:2mm;padding:2mm 6mm;font-weight:600;font-size:9.5pt}
+.lt{display:inline-block;background:#f1f3f2;border:.25mm solid #d6dbd8;border-radius:2mm;padding:2mm 5mm;font-weight:600;font-size:9.5pt;color:#1f1f1f}
+.right{display:flex;justify-content:flex-end;align-items:center;gap:2mm}
+.menu{background:#fff;border-radius:2mm;box-shadow:0 1mm 4mm rgba(0,0,0,.2);padding:1.5mm 0;font-size:9.5pt;width:52mm}
+.menu div{padding:1.8mm 4mm}
+.mk{position:relative;display:inline-block;box-shadow:0 0 0 .7mm var(--mark);border-radius:1.6mm}
+.mk.blk2{display:block}
+.mk::after{content:attr(data-n);position:absolute;top:-3.4mm;left:-3.4mm;width:5.2mm;height:5.2mm;background:var(--mark);color:#1b1100;font-weight:900;font-size:8.5pt;display:flex;align-items:center;justify-content:center;border-radius:1.2mm;font-family:"Segoe UI",sans-serif}
+.tile{display:flex;flex-direction:column;align-items:center;gap:1.5mm;width:19mm;font-size:8pt;color:#333;text-align:center}
+.tile i{width:11mm;height:11mm;border-radius:50%;background:#eef1f0;display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:700;font-size:12pt}
+.tile img{width:6.5mm;height:6.5mm;border-radius:1.4mm}
+.sms{display:inline-block;background:#e8f0fe;border-radius:3mm 3mm 3mm 1mm;padding:3mm 5mm;font-size:10pt;color:#1f1f1f}
+.sms b{display:block;font-size:20pt;letter-spacing:2pt;color:#0b57d0}
+.dotm{padding:0 1.5mm;background:#fff}
+/* AI icon tiles on dark */
+.aig{display:grid;grid-template-columns:repeat(3,1fr);gap:3.5mm}
+.ait{display:flex;align-items:center;gap:3mm;background:var(--surface);border:.3mm solid var(--line);border-radius:4mm;padding:3mm 3.5mm;min-width:0;color:var(--fg);text-decoration:none}
+.ait img{width:10mm;height:10mm;border-radius:2.5mm;background:#fff;padding:1.2mm;flex:none}
+.ait div{flex:1;min-width:0}
+.ait b{display:block;font-size:11pt}
+.ait code{display:block;font-family:Consolas,monospace;font-size:8.3pt;color:var(--accent);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* cover */
+.cover{background:radial-gradient(120mm 120mm at 80% 8%,rgba(52,211,153,.28),transparent 70%),radial-gradient(140mm 140mm at 0% 100%,rgba(16,120,80,.35),transparent 70%),linear-gradient(170deg,#0c2219,#06100c);align-items:center;justify-content:center;text-align:center;padding:0 18mm}
+.pill{display:inline-block;border:.3mm solid rgba(255,255,255,.28);border-radius:99px;padding:1.5mm 5mm;font-size:9.5pt;letter-spacing:1.2pt;color:#cfe3da}
+.logo{margin:9mm auto 9mm;display:inline-flex;align-items:center;gap:4mm;background:rgba(255,255,255,.06);border:.3mm solid rgba(255,255,255,.14);border-radius:7mm;padding:6mm 11mm;font-size:30pt;font-weight:700;letter-spacing:-.6pt}
+.logo .ic{width:14mm;height:14mm;border-radius:4mm;background:var(--accent);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:20pt;font-weight:900;overflow:hidden}
+.logo .ic img{width:14mm;height:14mm}
+.cover h1{font-size:34pt;line-height:1.08;margin:0;font-weight:900;letter-spacing:-.8pt}
+.cover .sub{margin-top:5mm;font-size:13pt;color:#b5cdc2}
+.chips{margin-top:8mm;display:flex;gap:3mm;justify-content:center;flex-wrap:wrap}
+.chips span{background:#eef5f1;color:#0b1a14;border-radius:99px;padding:2mm 5.5mm;font-weight:700;font-size:11pt}
+.need{margin-top:8mm;font-size:11pt;color:#b5cdc2}
+.series{position:absolute;bottom:12mm;left:0;right:0;font-size:9pt;color:#5f8273;letter-spacing:1pt}
+/* final */
+.fin .body{padding-top:18mm}
+.big-ok{width:22mm;height:22mm;border-radius:50%;background:var(--accent);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:30pt;font-weight:900;margin:0 auto}
+.fin h2{text-align:center;font-size:26pt;margin:6mm 0 0;font-weight:800;color:var(--accent);letter-spacing:-.5pt}
+.fin .lead{text-align:center;color:var(--muted);margin:2mm 0 2mm;font-size:12pt}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:4mm}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4mm}
+.mini{background:var(--surface);border:.3mm solid var(--line);border-radius:4.5mm;padding:5mm;font-size:11pt}
+.mini .e{font-size:16pt;display:block;margin-bottom:2mm}
+.mini.r{background:rgba(242,139,130,.1);border-color:rgba(242,139,130,.25);text-align:center;font-weight:600}
+.write{border:.45mm dashed var(--accent);border-radius:5mm;padding:6mm 7mm}
+.write h4{margin:0 0 4mm;color:var(--accent);font-size:13pt}
+.write .ln{display:flex;gap:3mm;margin-top:5mm;font-size:11.5pt}
+.write .ln i{flex:1;border-bottom:.35mm solid #3c5c4f}
+.note{background:var(--surface2);border-radius:5mm;padding:5mm 6mm;font-size:11pt}
+.note b{display:block;margin-bottom:1.5mm}
+.note ul{margin:0;padding-left:5mm}.note li{margin:1mm 0}
+.lnk{display:flex;align-items:center;gap:3mm;background:var(--surface2);border:.3mm solid var(--line);border-radius:3.5mm;padding:2.4mm 3.5mm;color:var(--fg);text-decoration:none;font-size:10.5pt;min-width:0}
+.lnk img{width:7mm;height:7mm;border-radius:1.6mm;background:#fff;padding:.8mm;flex:none}
+.lnk div{flex:1;min-width:0}
+.lnk code{display:block;margin-top:.3mm;font-family:Consolas,monospace;color:var(--accent);font-size:9pt;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sect{font-size:13pt;font-weight:700;margin:2mm 0 0;display:flex;align-items:center;gap:2.5mm}
+.sect::before{content:"";width:2.4mm;height:2.4mm;border-radius:50%;background:var(--accent)}
+/* phone mockups (telefon yo'riqnomasi) */
+.pst{display:flex;gap:7mm;align-items:center}
+.pst .pl{flex:1;min-width:0}
+.pst .pr{flex:none}
+.pst .sh h3{font-size:14.5pt}
+.pst .flow{font-size:11pt;line-height:1.95;padding:4mm 5mm}
+.pst .lnk{margin-top:2.5mm}
+.mkn{display:inline-flex;width:5mm;height:5mm;background:var(--mark);color:#1b1100;font-weight:900;font-size:8.5pt;border-radius:1.2mm;align-items:center;justify-content:center;vertical-align:middle;line-height:1}
+.phone{width:50mm;background:#0b0f0d;border-radius:7.5mm;padding:1.7mm;box-shadow:0 0 0 .35mm #2b4a3d,0 2.5mm 7mm rgba(0,0,0,.45)}
+.scrn{background:#fff;color:#1f1f1f;border-radius:6mm;overflow:hidden;height:100mm;display:flex;flex-direction:column;position:relative;font-family:"Segoe UI",Roboto,Arial,sans-serif;font-size:7.6pt;line-height:1.35}
+.sbar{flex:none;display:flex;justify-content:space-between;align-items:center;padding:1.9mm 4.2mm .8mm;font-size:6.3pt;font-weight:700;position:relative}
+.sbar::after{content:"";position:absolute;left:50%;top:1.5mm;width:2.6mm;height:2.6mm;border-radius:50%;background:#0b0f0d;transform:translateX(-50%)}
+.sbar .bt{display:inline-flex;align-items:center;gap:1mm}
+.sbar .bt i{display:inline-block;width:4.2mm;height:2.1mm;border:.25mm solid currentColor;border-radius:.6mm;position:relative}
+.sbar .bt i::before{content:"";position:absolute;top:.3mm;bottom:.3mm;left:.3mm;right:1mm;background:currentColor;border-radius:.2mm}
+.pc{flex:1;min-height:0;padding:2.5mm 4mm 2.2mm;display:flex;flex-direction:column;gap:2.1mm;position:relative}
+.hbar{flex:none;height:4.2mm;display:flex;justify-content:center;align-items:center}
+.hbar i{width:13mm;height:.9mm;border-radius:99px;background:#1f1f1f;opacity:.7}
+.phone .G{font-size:11pt}
+.phone .gh{font-size:11.5pt;margin:0;line-height:1.2}
+.phone .gs{font-size:6.8pt}
+.phone .fld{font-size:7.6pt;padding:2mm 2.4mm;border-radius:1.2mm}
+.phone .fld small{font-size:5.8pt;top:-1.7mm;left:2mm}
+.phone .row{gap:1.4mm}
+.phone .row .fld{padding:2mm 1.6mm}
+.phone .gbtn{font-size:7.2pt;padding:1.5mm 4mm;white-space:nowrap}
+.phone .tbtn{font-size:7.2pt;padding:1.5mm 1mm;white-space:nowrap}
+.phone .mk.blk2{margin-top:1.2mm}
+.phone .menu{width:auto;font-size:7.2pt;padding:1mm 0}
+.phone .menu div{padding:1.6mm 3mm}
+.phone .mk{box-shadow:0 0 0 .6mm var(--mark)}
+.phone .mk::after{width:4.4mm;height:4.4mm;font-size:7pt;top:-2.8mm;left:-2.8mm}
+.phone .gi{width:9mm;height:9mm}
+.pfoot{margin-top:auto;display:flex;flex-direction:column;gap:2mm}
+.pbot{display:flex;justify-content:space-between;align-items:center;gap:2mm}
+.home{background:radial-gradient(60mm 60mm at 85% 5%,#2f8f6a,transparent 70%),linear-gradient(170deg,#12392b,#0a1a14);color:#fff}
+.home .hbar i{background:#fff}
+.home .clk{text-align:center;font-size:21pt;font-weight:300;margin-top:2mm;line-height:1}
+.home .dt{text-align:center;font-size:6.5pt;opacity:.85}
+.hsrch{background:rgba(255,255,255,.92);color:#555;border-radius:99px;padding:1.6mm 3mm;font-size:6.5pt;margin-top:2mm}
+.hsrch b{color:#4285f4;margin-right:1.2mm}
+.apps{display:grid;grid-template-columns:repeat(4,1fr);gap:3mm 1.2mm;margin-top:auto}
+.app{display:flex;flex-direction:column;align-items:center;gap:.8mm;font-size:5.4pt;text-align:center;line-height:1.1}
+.app i{width:8.6mm;height:8.6mm;border-radius:2.4mm;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:9pt;font-weight:700;color:#fff}
+.app i img{width:6mm;height:6mm}
+.dock{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2mm;background:rgba(255,255,255,.14);border-radius:4mm;padding:2mm 1.5mm;margin-top:1mm}
+.dock .app span{display:none}
+.plist{display:flex;flex-direction:column;border-top:.25mm solid #e3e6e4;margin-top:1mm}
+.plist div{display:flex;align-items:center;gap:2.4mm;padding:2.1mm 1mm;border-bottom:.25mm solid #e3e6e4}
+.plist .mk div{border-bottom:0}
+.plist b{width:5mm;height:5mm;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:6.5pt;color:#fff;flex:none}
+.kb{flex:none;background:#e8ecea;padding:1.4mm .8mm 1mm;display:flex;flex-direction:column;gap:.9mm}
+.kb div{display:flex;gap:.6mm;justify-content:center}
+.kb i{flex:1;max-width:3.9mm;height:4mm;background:#fff;border-radius:.7mm;font-style:normal;font-size:5.6pt;display:flex;align-items:center;justify-content:center;color:#1f1f1f;box-shadow:0 .2mm 0 #b9c0bc}
+.kb i.w{max-width:7mm;background:#d3d9d6}
+.kb i.sp{max-width:none;flex:4}
+.kb + .hbar{background:#e8ecea}
+.rad{display:flex;gap:2mm;align-items:center;font-size:7pt;padding:.6mm 0}
+.rad i{flex:none;width:3mm;height:3mm;border-radius:50%;border:.35mm solid #5f6368;box-sizing:border-box}
+.rad.on i{border-color:#0b57d0;background:#0b57d0;box-shadow:inset 0 0 0 .55mm #fff}
+.em{display:flex;justify-content:space-between;font-size:7pt}
+.em span{color:#666}
+.notif{position:absolute;left:2.2mm;right:2.2mm;top:6.5mm;background:#26302c;color:#fff;border-radius:3mm;padding:2mm 2.8mm;font-size:6.8pt;line-height:1.35;box-shadow:0 1.5mm 4mm rgba(0,0,0,.3);z-index:2}
+.notif small{display:block;opacity:.7;font-size:5.8pt;margin-bottom:.4mm}
+.lns{display:flex;flex-direction:column;gap:1.7mm;margin-top:1mm}
+.ln2{display:block;height:1.2mm;border-radius:99px;background:#e2e6e4}
+.srch{display:flex;align-items:center;gap:2mm;background:#eef2f0;border-radius:99px;padding:1.4mm 1.6mm 1.4mm 3mm;font-size:7pt;color:#555}
+.srch > span:first-child{flex:1;white-space:nowrap}
+.av{width:5.6mm;height:5.6mm;border-radius:50%;background:#34a853;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:7pt;flex:none}
+.mail{display:flex;gap:2.2mm;align-items:flex-start;font-size:6.6pt;line-height:1.3}
+.mail .w{flex:1;min-width:0}
+.mail .w b{display:flex;justify-content:space-between;font-size:7.2pt}
+.mail .w b small{font-weight:400;color:#666;font-size:6pt}
+.mail em{font-style:normal;color:#555;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fab{display:inline-block;background:#c2e7ff;color:#001d35;border-radius:3.5mm;padding:2.6mm 3.6mm;font-weight:700;font-size:7.4pt}
+.bnav{flex:none;display:flex;justify-content:space-around;padding:1.6mm 0 .4mm;background:#f3f6f4;font-size:6pt;color:#444}
+.bnav + .hbar{background:#f3f6f4}
+.code.sm pre{font-size:8.6pt;line-height:1.42}
+
+body{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.page{width:auto;max-width:860px;height:auto;margin:0 auto 22px;overflow:visible;border-radius:22px;border:1px solid var(--line)}
+.page:first-of-type{margin-top:16px}
+.bar{border-radius:22px 22px 0 0;padding:0 24px}
+.body{padding:22px clamp(14px,3vw,30px) 26px;gap:20px}
+.cover{padding:64px 20px 72px;position:relative}
+.series{position:static;margin-top:36px}
+.fin .body{padding-top:40px}
+.scr{overflow-x:auto}
+.foot-nav{max-width:860px;margin:0 auto 40px;text-align:center;color:var(--muted);font-size:13px}
+.pst .phone{zoom:1.15}
+@media (max-width:640px){
+ .gcard{flex-direction:column;gap:4mm}
+ .grid2,.grid3,.aig{grid-template-columns:1fr}
+ .sh{flex-wrap:wrap}
+ .sh h3{font-size:14pt;min-width:60%}
+ .cover h1{font-size:25pt}
+ .logo{font-size:22pt;padding:5mm 7mm}
+ .fr{flex-wrap:wrap}.fr .k{min-width:0;width:100%}
+ kbd.big{font-size:15pt}
+ .pst{flex-direction:column;align-items:stretch;gap:5mm}
+ .pst .pr{align-self:center}
+ .pst .phone{zoom:1.3}
+}
+</style>
+<section class="page cover"><div>
+<div class="pill">YO‘RIQNOMA</div><br>
+<div class="logo"><div class="ic"><img src="data:image/png;base64,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" alt=""></div>AI xodimlar</div>
+<h1>O‘z <span class="a">AI xodimingizni</span><br>yarating va o‘qiting</h1><div class="sub">4 ta tayyor xodim · siz bilan birga ishlaydi</div>
+<div class="chips"><span>✓ Marketolog</span><span>✓ Prodyuser</span><span>✓ Savdo rahbari</span><span>✓ Metodist</span></div><div class="need">Kerak: Claude hisobi (3-yo‘riqnoma) · biznesingiz haqida ma’lumot</div></div>
+<div class="series">YO‘RIQNOMALAR TO‘PLAMI · 5 / 7</div></section><section class="page"><div class="bar"><b>AI xodim: yig‘ish</b><span>1–2-qadam</span></div><div class="body"><div class="card"><div class="sh"><div class="num">1</div><h3>AI xodim nimadan iborat</h3></div><div class="cb grid3"><div class="mini"><span class="e">🧠</span><b>Ko‘rsatma</b><div style="color:var(--muted);font-size:10pt;margin-top:1mm">Miyasi: kim, nima qiladi, qanday ishlaydi</div></div><div class="mini"><span class="e">📚</span><b>Bilim fayllari</b><div style="color:var(--muted);font-size:10pt;margin-top:1mm">Xotirasi: kasbiy metodika va sizning biznesingiz</div></div><div class="mini"><span class="e">👤</span><b>Siz</b><div style="color:var(--muted);font-size:10pt;margin-top:1mm">Rahbar: tanlaysiz, tuzatasiz, o‘qitasiz</div></div></div><div class="cb flow">Vazifa berasiz <span class="ar">→</span> xodim <b>savol beradi</b> <span class="ar">→</span> <b>2-3 variant</b> taklif qiladi <span class="ar">→</span> siz tanlaysiz <span class="ar">→</span> tayyor matn <span class="ar">→</span> tuzatish <b>qoidaga</b> aylanadi</div><div class="ok"><div>Bu xodim o‘zicha ishlab ketmaydi: siz bilan birga, sizning qaroringiz bilan ishlaydi.</div></div></div><div class="card"><div class="sh"><div class="num">2</div><h3>claude.ai → <span class="a">Projects</span> → <span class="a">“＋ New project”</span></h3><button class="cpy" data-copy="https://claude.ai/projects">Nusxalash</button></div><div class="cb scr"><div class="top"><div class="dots"><i></i><i></i><i></i></div><div class="url">claude.ai/projects</div></div><div class="in"><div class="right" style="justify-content:space-between;margin-bottom:4mm"><span style="font-size:13pt">Projects</span><span class="mk" data-n="1"><span class="blk">＋ New project</span></span></div><div style="display:flex;flex-direction:column;gap:3.5mm"><span class="mk blk2" data-n="2"><div class="fld"><small>What are you working on? · Nomi</small>AI-Marketolog</div></span><div class="fld"><small>What are you trying to achieve? · Tavsif</small><span style="color:#666">Reels, storis va taklif matnlari</span></div></div><div class="right" style="margin-top:3mm"><span class="mk" data-n="3"><span class=blk>Create project</span></span></div></div></div></div></div></section><section class="page"><div class="bar"><b>AI xodim: yig‘ish</b><span>3–4-qadam</span></div><div class="body"><div class="card"><div class="sh"><div class="num">3</div><h3>Xodimni tanlang: <span class="a">har biriga alohida loyiha</span></h3></div><div class="cb grid2"><div class="mini"><span class="chip" style="font-size:9pt">Marketing</span><div style="margin-top:2mm"><b>AI-Marketolog</b></div><div style="color:var(--muted);font-size:10pt;margin-top:1mm">Reels ssenariysi, storis rejasi, post va sotuvchi taklif (ofer) matnlari.</div></div><div class="mini"><span class="chip" style="font-size:9pt">Zapusk</span><div style="margin-top:2mm"><b>AI-Prodyuser</b></div><div style="color:var(--muted);font-size:10pt;margin-top:1mm">Zapusk va aksiya rejasi: qaysi kuni nima chiqadi, qachon sotuv ochiladi.</div></div><div class="mini"><span class="chip" style="font-size:9pt">Sotuv</span><div style="margin-top:2mm"><b>AI-Savdo rahbari</b></div><div style="color:var(--muted);font-size:10pt;margin-top:1mm">Sotuv skripti, e’tirozlarga tayyor javoblar va yozishmalar tahlili.</div></div><div class="mini"><span class="chip" style="font-size:9pt">Mahsulot</span><div style="margin-top:2mm"><b>AI-Metodist</b></div><div style="color:var(--muted);font-size:10pt;margin-top:1mm">Mahsulot tuzilishi: paketlar, modullar, tariflar va narx.</div></div></div><div class="tip"><div>Bitta loyihada bitta xodim. Shunda u o‘z vazifasini aralashtirmaydi.</div></div></div><div class="card"><div class="sh"><div class="num">4</div><h3><span class="a">“Instructions”</span> ga xodim ko‘rsatmasini qo‘ying</h3></div><div class="cb scr"><div class="in"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3mm"><b style="font-size:12pt">AI-Marketolog</b><span class="mk" data-n="1"><span class="lt">✎ Instructions</span></span></div><span class="mk blk2" data-n="2"><div style="border:.3mm solid #c9cfcc;border-radius:2mm;padding:3mm;font-family:Consolas,monospace;font-size:8.5pt;line-height:1.5;color:#333">Sen [Biznes nomi]ning AI-marketologisan…<br>BIRGA ISHLASH TARTIBI: avval savol, keyin variantlar…<br>QOIDALAR: 1. …</div></span><div class="right" style="margin-top:3mm"><span class="mk" data-n="3"><span class=blk>Save instructions</span></span></div></div></div><div class="tip"><div>Har bir xodimning to‘liq ko‘rsatmasi shu yo‘riqnomaning oxirida, alohida sahifada.</div></div></div></div></section><section class="page"><div class="bar"><b>AI xodim: yig‘ish</b><span>5-qadam</span></div><div class="body"><div class="card"><div class="sh"><div class="num">5</div><h3><span class="a">“Files”</span> → <span class="a">“Add text content”</span>: bilim fayllarini qo‘shing</h3></div><div class="cb scr"><div class="in"><div style="display:flex;gap:5mm;align-items:flex-start"><div style="width:38%"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2.5mm"><b>Files</b><span class="mk" data-n="1"><span class="lt">＋</span></span></div><div class="menu" style="width:auto"><div>⬆ Upload from device</div><span class="mk blk2" data-n="2"><div>＋ Add text content</div></span></div></div><div style="flex:1;border:.25mm solid #d6dbd8;border-radius:2.5mm;padding:3.5mm;display:flex;flex-direction:column;gap:3mm"><span class="mk blk2" data-n="3"><div class="fld"><small>Title</small>Marketolog metodikasi</div></span><div class="fld" style="font-family:Consolas,monospace;font-size:8pt;color:#444;line-height:1.5"><small>Content</small># MARKETOLOG METODIKASI<br>## 1. Avval mijozni tushun<br>…</div><div class="right"><span class="mk" data-n="4"><span class=blk>Add Content</span></span></div></div></div></div></div><div class="cb flow">Matnni nusxalang <span class="ar">→</span> <b>Title</b> ga fayl nomi <span class="ar">→</span> <b>Content</b> ga matn <span class="ar">→</span> <span class="chip dk">Add Content</span></div><div class="sect" style="margin-top:5mm">Har xodimga 3 xil bilim:</div><div class="cb grid3"><div class="mini"><b class="a">Xodim metodikasi</b><div style="margin-top:1.5mm">Kasbiy bilimi: qanday ishlash kerak</div><div style="margin-top:2mm;color:var(--muted);font-size:10pt">Xodim sahifasidan nusxalang</div></div><div class="mini"><b class="a">Biznes pasporti</b><div style="margin-top:1.5mm">Biznesingiz: mahsulot, narx, mijoz</div><div style="margin-top:2mm;color:var(--muted);font-size:10pt">6-qadam</div></div><div class="mini"><b class="a">Sizning fayllaringiz</b><div style="margin-top:1.5mm">Narxlar, FAQ, sharhlar, postlar</div><div style="margin-top:2mm;color:var(--muted);font-size:10pt">7-qadam</div></div></div><div class="tip"><div>Uzun matnni chatga tashlamang: aynan Files’ga qo‘shing. Shunda xodim uni har suhbatda eslab turadi.</div></div></div></div></section><section class="page"><div class="bar"><b>AI xodim: o‘qitish</b><span>6-qadam</span></div><div class="body"><div class="card"><div class="sh"><div class="num">6</div><h3><span class="a">Biznes pasporti</span>ni to‘ldiring: xodim sizni shundan taniydi</h3></div><div class="cb code sm"><div class="lb"><span>Bilim fayli · Biznes pasporti</span><button class="cpy sm">Nusxalash</button></div><pre># BIZNES PASPORTI
+Xodim har javobda shu faylga tayanadi. Qavs ichini to‘ldiring, keraksiz qatorni o‘chiring.
+
+1. BIZNES
+- Nomi: <span class="ph">[Gulnoza Style]</span>
+- Soha: <span class="ph">[ayollar kiyimi, onlayn do‘kon]</span>
+- Shahar va hudud: <span class="ph">[Toshkent, butun O‘zbekiston bo‘ylab yetkazish]</span>
+- Ish vaqti va aloqa: <span class="ph">[har kuni 9:00-21:00, +998 .. ... .. ..]</span>
+
+2. MAHSULOT VA NARXLAR
+- <span class="ph">[Mahsulot 1]</span> | <span class="ph">[narx]</span> so‘m | <span class="ph">[qisqa tavsif]</span>
+- <span class="ph">[Mahsulot 2]</span> | <span class="ph">[narx]</span> so‘m | <span class="ph">[qisqa tavsif]</span>
+- Yetkazish va to‘lov: <span class="ph">[shartlar]</span>
+
+3. MIJOZ
+- Kim: <span class="ph">[yoshi, jinsi, kasbi, daromadi]</span>
+- Asosiy muammosi: <span class="ph">[uni nima qiynaydi]</span>
+- Nimani xohlaydi: <span class="ph">[qanday natija]</span>
+- Sotib olishdan oldingi shubhasi: <span class="ph">[nimadan qo‘rqadi]</span>
+
+4. NEGA BIZ
+- Asosiy ustunligimiz: <span class="ph">[raqobatchilardan farqi]</span>
+- Isbot: <span class="ph">[raqamlar, sharhlar, necha yil tajriba]</span>
+- Raqobatchilar: <span class="ph">[2-3 ta nom va ularning narxi]</span>
+
+5. SOTUV KANALLARI VA RAQAMLAR
+- Kanallar: <span class="ph">[Instagram @..., Telegram @..., do‘kon manzili]</span>
+- Hozir: <span class="ph">[obunachilar, oylik sotuv, o‘rtacha chek]</span>
+
+6. USLUB VA CHEKLOVLAR
+- Murojaat: <span class="ph">["Siz" deb, samimiy]</span>
+- Til: <span class="ph">[o‘zbekcha lotin; mijoz ruscha yozsa, ruscha]</span>
+- Va’da qilmaymiz: <span class="ph">[masalan: 100% natija, tibbiy da’volar]</span>
+- Shu oydagi maqsad: <span class="ph">[masalan: 120 ta buyurtma]</span></pre></div><div class="tip"><div>Bir marta to‘ldiring va 4 ta xodimning hammasiga qo‘shing. Narx yoki mahsulot o‘zgarsa, yangilang.</div></div></div></div></section><section class="page"><div class="bar"><b>AI xodim: o‘qitish</b><span>7–8-qadam</span></div><div class="body"><div class="card"><div class="sh"><div class="num">7</div><h3>O‘z fayllaringizni yuklang: <span class="a">real misollar</span></h3></div><div class="cb" style="display:flex;flex-wrap:wrap;gap:2.5mm"><span class="chip ol">📄 Narxlar ro‘yxati</span><span class="chip ol">📦 Katalog</span><span class="chip ol">❓ Ko‘p beriladigan savollar</span><span class="chip ol">⭐ Mijoz sharhlari</span><span class="chip ol">🎬 Eng yaxshi 10 ta post yoki Reels matni</span><span class="chip ol">💬 Muvaffaqiyatli yozishmalar</span><span class="chip ol">🔎 Raqobatchilar</span></div><div class="cb flow"><span class="chip ol">＋</span> <span class="ar">→</span> <b>Upload from device</b> <span class="ar">→</span> PDF, Word, rasm yoki skrinshot</div><div class="tip"><div>Qanchalik ko‘p real misol bersangiz, xodim shunchalik sizning uslubingizda yozadi.</div></div><div class="warn"><div>Parol, karta raqami va mijozlarning shaxsiy ma’lumotlarini yuklamang.</div></div></div><div class="card"><div class="sh"><div class="num">8</div><h3>Birinchi suhbat: xodim avval <span class="a">savol beradi</span></h3></div><div class="cb scr"><div class="in"><div style="display:flex;flex-direction:column;gap:2.5mm;font-size:9.5pt"><div style="color:#888;font-size:8.5pt">📁 AI-Marketolog</div><div style="align-self:flex-end;background:#f0eee6;border-radius:3mm;padding:2mm 3.5mm">Keyingi haftaga Reels kerak</div><span class="mk blk2" data-n="1"><div style="padding:1mm 1.5mm">Yaxshi! Biznes pasportingizni ko‘rdim. Boshlashdan oldin 2 ta savol: 1) Maqsad obunachimi yoki sotuv? 2) Qaysi mahsulotni ko‘rsatamiz? <span style="color:#888">Shoshilsangiz, “tez” deb yozing.</span></div></span><div style="align-self:flex-end;background:#f0eee6;border-radius:3mm;padding:2mm 3.5mm">Sotuv. Bayramlik ko‘ylaklar</div><span class="mk blk2" data-n="2"><div style="padding:1mm 1.5mm">3 ta yo‘nalish: <b>A)</b> “Bayramda qilinadigan 3 xato” · <b>B)</b> “Oldin va keyin” obrazlar · <b>C)</b> Mijoz sharhi. Qaysi birini yozay?</div></span></div></div></div><div class="ok"><div>Siz tanlaysiz, xodim yozadi. Pul, narx va va’da bo‘yicha qaror doim sizda.</div></div></div></div></section><section class="page"><div class="bar"><b>AI xodim: o‘qitish</b><span>9-qadam</span></div><div class="body"><div class="card"><div class="sh"><div class="num">9</div><h3>O‘qiting: har tuzatish <span class="a">qoidaga</span> aylanadi</h3></div><div class="cb flow">Javob yoqmadi <span class="ar">→</span> tuzatish yozing <span class="ar">→</span> xodim <b>qoida</b> yozib beradi <span class="ar">→</span> <span class="chip ol">✎ Instructions</span> <span class="ar">→</span> oxiridagi <b>QOIDALAR</b> ro‘yxatiga qo‘shing <span class="ar">→</span> <span class="chip dk">Save</span></div><div class="cb code"><div class="lb"><span>Tuzatish berish formulasi</span><button class="cpy sm">Nusxalash</button></div><pre>Bu javobning <span class="ph">[nimasi]</span> yoqmadi, chunki <span class="ph">[sabab]</span>. Keyingi safar <span class="ph">[qanday qilish kerak]</span>.
+Shuni QOIDALAR ro‘yxatiga qo‘shish uchun bitta qisqa qoida qilib yoz.</pre></div><div class="cb code"><div class="lb"><span>Haftalik o‘qitish (hafta oxirida shu chatga yozing)</span><button class="cpy sm">Nusxalash</button></div><pre>Shu suhbatdagi tuzatishlarimni ko‘rib chiq. QOIDALAR ro‘yxatiga qo‘shish uchun 3-5 ta qisqa va aniq qoida yozib ber. Har biri bitta qatorda bo‘lsin.</pre></div><div class="cb code"><div class="lb"><span>Qoida namunalari</span><button class="cpy sm">Nusxalash</button></div><pre>1. Narxni doim so‘mda yoz: 250 000 so‘m.
+2. Reels matnida emoji 3 tadan oshmasin.
+3. "Arzon" so‘zini ishlatma, "qulay narx" de.
+4. Mijozga birinchi xabarda faqat bitta savol ber.</pre></div><div class="ok"><div>Yangi qoidani saqlagach, yangi chat oching va sinab ko‘ring. 2-3 hafta o‘qitsangiz, xodim sizning uslubingizda ishlaydi.</div></div></div></div></section><section class="page"><div class="bar"><b>AI xodimlar</b><span>1 / 4 · ko‘rsatma</span></div><div class="body" style="gap:5mm"><div class="card"><div class="sh"><div class="num">1</div><div style="flex:1"><span class="chip" style="font-size:9pt">Marketing</span><h3 style="margin-top:1.5mm">AI-Marketolog</h3></div></div><div style="color:var(--muted);margin-top:2.5mm">Reels ssenariysi, storis rejasi, post va sotuvchi taklif (ofer) matnlari.</div><div class="sect" style="margin-top:4mm">1. Loyiha oching</div><div class="fr"><span class="k">Loyiha nomi</span><span class="v">AI-Marketolog</span><button class="cpy sm" data-copy="AI-Marketolog">Nusxalash</button></div><div class="sect" style="margin-top:4mm">2. Instructions ga qo‘ying</div><div class="cb code sm"><div class="lb"><span>Ko‘rsatma · Instructions</span><button class="cpy sm">Nusxalash</button></div><pre>Sen <span class="ph">[Biznes nomi]</span>ning AI-marketologisan. Men bilan birga ishlaysan: men rahbar, sen tajribali hamkasb.
+
+VAZIFANG:
+- Reels va video ssenariylari (soniyalarga bo‘lingan)
+- Storis ketma-ketligi va haftalik kontent reja
+- Post matnlari va sarlavhalar
+- Rad etib bo‘lmaydigan taklif (ofer) qurish
+
+BILIM MANBALARING (shu tartibda): QOIDALAR → Biznes pasporti → men yuklagan fayllar → Marketolog metodikasi.
+
+BIRGA ISHLASH TARTIBI (eng muhim):
+1. Vazifani olganda Biznes pasporti va fayllarni o‘qi. Yetmagan ma’lumotni 2-3 ta qisqa savol bilan so‘ra.
+2. Darhol tayyor matnga shoshilma: avval 2-3 ta yo‘nalish taklif qil, har biriga bir gap izoh.
+3. Men tanlagach, to‘liq variantni yoz va oxirida "Nimani o‘zgartiramiz?" deb so‘ra.
+4. Men tuzatsam, shu suhbatda qo‘lla. Muhim tuzatish bo‘lsa, QOIDALAR ro‘yxatiga qo‘shish uchun bitta qisqa qoida yozib ber.
+5. Men "tez" desam, savolsiz darhol eng yaxshi variantni yoz.
+6. Narx, chegirma va va’da bo‘yicha qarorni men qabul qilaman, sen tavsiya berasan.
+7. Faylda yo‘q fakt va raqamni o‘ylab topma: [qavs ichida] belgilab qoldir.
+
+FORMAT:
+- Ssenariy: 0-3 son ilgak | 3-20 son asosiy qism | oxirgi 5 son chaqiriq. Har kadr: ekrandagi yozuv + ovoz matni.
+- Til: sodda, jonli o‘zbekcha, "Siz" deb. Emoji me’yorida.
+- Har matn aniq chaqiriq bilan tugasin.
+
+QOIDALAR (men o‘qitganim sari to‘ldiriladi, ular hamma narsadan ustun):
+1. <span class="ph">[Birinchi qoida shu yerga yoziladi]</span></pre></div></div></div></section><section class="page"><div class="bar"><b>AI xodimlar</b><span>1 / 4 · bilim fayli</span></div><div class="body" style="gap:5mm"><div class="card"><div class="sh"><div class="num">1</div><div style="flex:1"><span class="chip" style="font-size:9pt">Marketing</span><h3 style="margin-top:1.5mm">AI-Marketolog: bilim fayli</h3></div></div><div class="sect" style="margin-top:4mm">3. Files → Add text content</div><div class="fr"><span class="k">Title</span><span class="v">Marketolog metodikasi</span><button class="cpy sm" data-copy="Marketolog metodikasi">Nusxalash</button></div><div class="cb code sm"><div class="lb"><span>Content · Marketolog metodikasi</span><button class="cpy sm">Nusxalash</button></div><pre># MARKETOLOG METODIKASI
+
+## 1. Avval mijozni tushun
+Har kontentdan oldin 4 savolga javob ber: Kim ko‘radi? Uni nima qiynaydi? U nimani xohlaydi? Nega aynan hozir harakat qilishi kerak? Javobni Biznes pasportidan ol, yo‘q bo‘lsa so‘ra.
+
+## 2. Reels tuzilishi (15-40 soniya)
+- 0-3 son ILGAK: ko‘rishni to‘xtatadigan gap yoki kadr. Bitta fikr, 10 so‘zdan kam.
+- 3-20 son QIYMAT: muammo → sabab → yechim. Har 3-4 soniyada kadr yoki yozuv almashsin.
+- Oxirgi 5 son CHAQIRIQ: bitta aniq harakat ("Direktga 'narx' deb yozing").
+Ilgak turlari: savol ("Nega ...?"), xato ("Ko‘pchilik ...da adashadi"), raqam ("3 ta usul"), natija ("30 kunda ..."), taqqoslash ("Arzon va sifatli farqi"), qarama-qarshi fikr ("... qilmang"), shaxsiy hikoya ("Men 2 yil ... qildim"), sahna ortidan ("Buyurtmangiz qanday tayyorlanadi").
+
+## 3. Kontent turlari va nisbati
+- 40% FOYDALI: maslahat, qo‘llanma, xatolar. Maqsad: saqlash va ulashish.
+- 25% ISHONCH: jarayon, jamoa, sharhlar, natijalar, "oldin va keyin".
+- 20% SOTUV: mahsulot, taklif, aksiya, savol-javob.
+- 15% SHAXSIY: hayot, qadriyatlar, hikoya. Odamlar odamdan sotib oladi.
+
+## 4. Storis: 7 kunlik ketma-ketlik
+1-kun: muammo haqida so‘rovnoma. 2-kun: muammoning sababi. 3-kun: jarayon va sahna ortidan.
+4-kun: mijoz natijasi yoki sharh. 5-kun: ko‘p beriladigan savollarga javob.
+6-kun: taklif e’lon qilinadi (muddat bilan). 7-kun: oxirgi eslatma, qolgan joy yoki muddat.
+Har kuni 5-8 ta storis, kamida bittasida savol yoki so‘rovnoma bo‘lsin.
+
+## 5. Post formulasi: Muammo → Kuchaytirish → Yechim
+1-qator: og‘riq yoki natija. Keyin muammo nega jiddiyligi. Keyin yechim va isbot. Oxirida chaqiriq.
+
+## 6. Taklif (ofer) qurish
+Kuchli taklif 6 qismdan iborat:
+1. Aniq natija ("2 haftada ...").  2. Muddat va qulaylik.  3. Isbot: sharh, raqam, kafolat.
+4. Bonus: asosiy mahsulotni to‘ldiradi.  5. Cheklov: soni yoki muddati (faqat haqiqiy bo‘lsa).
+6. Narx asoslanishi: kunlik narxi, muqobil yechim bilan taqqoslash.
+Taklif nomi natijani aytsin: "Kiyim" emas, "Bayramga 3 ta tayyor obraz".
+
+## 7. O‘zbek auditoriyasi
+Sodda so‘z, qisqa gap, "Siz" deb hurmat, samimiylik. Mahalliy misol: so‘m, shahar nomlari, mavsumlar (Navro‘z, Ramazon, 8-mart, Yangi yil, maktab mavsumi). Ruscha so‘z o‘rniga o‘zbekcha muqobilini yoz.
+
+## 8. Tekshiruv (har matndan oldin)
+☐ Ilgak 3 soniyada tushunarli  ☐ Bitta asosiy fikr  ☐ Mijoz tilida  ☐ Isbot bor
+☐ Aniq chaqiriq  ☐ Faktlar Biznes pasportidan  ☐ QOIDALAR bajarilgan</pre></div></div></div></section><section class="page"><div class="bar"><b>AI xodimlar</b><span>2 / 4 · ko‘rsatma</span></div><div class="body" style="gap:5mm"><div class="card"><div class="sh"><div class="num">2</div><div style="flex:1"><span class="chip" style="font-size:9pt">Zapusk</span><h3 style="margin-top:1.5mm">AI-Prodyuser</h3></div></div><div style="color:var(--muted);margin-top:2.5mm">Zapusk va aksiya rejasi: qaysi kuni nima chiqadi, qachon sotuv ochiladi.</div><div class="sect" style="margin-top:4mm">1. Loyiha oching</div><div class="fr"><span class="k">Loyiha nomi</span><span class="v">AI-Prodyuser</span><button class="cpy sm" data-copy="AI-Prodyuser">Nusxalash</button></div><div class="sect" style="margin-top:4mm">2. Instructions ga qo‘ying</div><div class="cb code sm"><div class="lb"><span>Ko‘rsatma · Instructions</span><button class="cpy sm">Nusxalash</button></div><pre>Sen <span class="ph">[Biznes nomi]</span>ning AI-prodyuserisan: sotuv kampaniyalari (zapusk, aksiya, yangi mahsulot) rejasini men bilan birga tuzasan.
+
+VAZIFANG:
+- Zapusk rejasi: qaysi kuni nima chiqadi, sotuv qachon ochiladi va yopiladi
+- Lid-magnit (bepul sovg‘a) g‘oyasi va uni tarqatish
+- Prognoz: qamrov → so‘rovlar → sotuv
+- Zapuskdan keyingi tahlil va keyingisi uchun xulosa
+
+BILIM MANBALARING (shu tartibda): QOIDALAR → Biznes pasporti → men yuklagan fayllar → Prodyuser metodikasi.
+
+BIRGA ISHLASH TARTIBI (eng muhim):
+1. Vazifani olganda Biznes pasporti va fayllarni o‘qi. Yetmagan ma’lumotni 2-3 ta qisqa savol bilan so‘ra.
+2. Darhol tayyor matnga shoshilma: avval 2-3 ta yo‘nalish taklif qil, har biriga bir gap izoh.
+3. Men tanlagach, to‘liq variantni yoz va oxirida "Nimani o‘zgartiramiz?" deb so‘ra.
+4. Men tuzatsam, shu suhbatda qo‘lla. Muhim tuzatish bo‘lsa, QOIDALAR ro‘yxatiga qo‘shish uchun bitta qisqa qoida yozib ber.
+5. Men "tez" desam, savolsiz darhol eng yaxshi variantni yoz.
+6. Narx, chegirma va va’da bo‘yicha qarorni men qabul qilaman, sen tavsiya berasan.
+7. Faylda yo‘q fakt va raqamni o‘ylab topma: [qavs ichida] belgilab qoldir.
+
+FORMAT:
+- Rejani jadvalda ber: Kun | Kanal | Kontent | Maqsad | Mas’ul.
+- Har rejaga 3 ta asosiy xavf va ularning yechimini qo‘sh.
+- Prognozda formulani ko‘rsat, taxminiy raqamlarni "taxminan" deb belgila.
+
+QOIDALAR (men o‘qitganim sari to‘ldiriladi, ular hamma narsadan ustun):
+1. <span class="ph">[Birinchi qoida shu yerga yoziladi]</span></pre></div></div></div></section><section class="page"><div class="bar"><b>AI xodimlar</b><span>2 / 4 · bilim fayli</span></div><div class="body" style="gap:5mm"><div class="card"><div class="sh"><div class="num">2</div><div style="flex:1"><span class="chip" style="font-size:9pt">Zapusk</span><h3 style="margin-top:1.5mm">AI-Prodyuser: bilim fayli</h3></div></div><div class="sect" style="margin-top:4mm">3. Files → Add text content</div><div class="fr"><span class="k">Title</span><span class="v">Prodyuser metodikasi</span><button class="cpy sm" data-copy="Prodyuser metodikasi">Nusxalash</button></div><div class="cb code sm"><div class="lb"><span>Content · Prodyuser metodikasi</span><button class="cpy sm">Nusxalash</button></div><pre># PRODYUSER METODIKASI
+
+## 1. Zapusk nima
+Zapusk: cheklangan muddatda diqqatni bitta taklifga jamlab sotish. Oddiy sotuvdan farqi: aniq sana, qiziqtirish (isitish) bosqichi va muddat tugashi. Yiliga 3-6 ta zapusk yetarli.
+
+## 2. Besh bosqich
+1. TAYYORGARLIK (5-7 kun): taklif, narx, to‘lov usuli, sotuvchi va lid-magnit tayyor.
+2. ISITISH (5-10 kun): muammo, ishonch, natijalar. Sotuv haqida hali gapirilmaydi.
+3. OCHILISH (1-2 kun): taklif e’lon qilinadi, jonli efir yoki Telegram post, birinchi bonus.
+4. SOTUV (3-5 kun): sharhlar, savol-javob, e’tirozlarga javob, eslatmalar.
+5. YOPILISH (1 kun): oxirgi eslatma, muddat aniq yopiladi. Va’dani buzmang.
+Keyin TAHLIL: 2-3 kun ichida.
+
+## 3. 14 kunlik reja shabloni
+1-2 kun: so‘rovnoma ("Sizni nima qiynaydi?"). 3-kun: lid-magnit e’loni.
+4-6 kun: foydali kontent va ishonch (jarayon, natija). 7-kun: lid-magnit beriladi.
+8-9 kun: sharhlar va "oldin va keyin". 10-kun: SOTUV OCHILADI (efir yoki post + 48 soatlik bonus).
+11-12 kun: savol-javob, e’tirozlar. 13-kun: oxirgi kun eslatmasi. 14-kun: yopilish va rahmat.
+
+## 4. Lid-magnit (bepul sovg‘a)
+Kichik va tez foyda beradigan narsa: chek-list, 10 daqiqalik dars, katalog, narxlar jadvali, bepul konsultatsiya, sinov namunasi. Qoida: asosiy mahsulotga olib boradigan muammoni yechsin. Olish uchun bitta harakat: "Direktga 'sovg‘a' deb yozing" yoki Telegram botga obuna.
+
+## 5. Sotuv ochish formatlari
+- Storis seriyasi: tez, arzon, kichik narxli mahsulot uchun.
+- Jonli efir (40-60 daqiqa): o‘rtacha va qimmat mahsulot, savollarga jonli javob.
+- Telegram kanal: post + so‘rovnoma + cheklangan bonus.
+- Shaxsiy yozishma: qimmat xizmat, har mijoz bilan alohida.
+
+## 6. Raqamlar va prognoz
+Sotuv = qamrov × so‘rov foizi × sotuv foizi.
+Misol: 10 000 qamrov × 3% = 300 so‘rov × 10% = 30 sotuv; 30 × 500 000 = 15 mln so‘m.
+Odatiy oraliq: so‘rov 1-5%, so‘rovdan sotuv 5-20%. Haqiqiy foizni o‘tgan zapuskdan oling.
+
+## 7. Har zapuskdagi xavflar
+To‘lov ishlamay qoladi → oldindan sinang. Sotuvchi ulgurmaydi → tayyor javoblar va navbatchi. Qamrov kam → reklama byudjeti yoki hamkor bloger. Muddat cho‘ziladi → ishonch yo‘qoladi.
+
+## 8. Tahlil savollari
+Reja va haqiqiy raqamlar qancha farq qildi? Qaysi kontent eng ko‘p so‘rov olib keldi? Mijozlar qaysi e’tirozni ko‘p aytdi? Keyingi zapuskda birinchi navbatda nimani o‘zgartiramiz?</pre></div></div></div></section><section class="page"><div class="bar"><b>AI xodimlar</b><span>3 / 4 · ko‘rsatma</span></div><div class="body" style="gap:5mm"><div class="card"><div class="sh"><div class="num">3</div><div style="flex:1"><span class="chip" style="font-size:9pt">Sotuv</span><h3 style="margin-top:1.5mm">AI-Savdo rahbari</h3></div></div><div style="color:var(--muted);margin-top:2.5mm">Sotuv skripti, e’tirozlarga tayyor javoblar va yozishmalar tahlili.</div><div class="sect" style="margin-top:4mm">1. Loyiha oching</div><div class="fr"><span class="k">Loyiha nomi</span><span class="v">AI-Savdo rahbari</span><button class="cpy sm" data-copy="AI-Savdo rahbari">Nusxalash</button></div><div class="sect" style="margin-top:4mm">2. Instructions ga qo‘ying</div><div class="cb code sm"><div class="lb"><span>Ko‘rsatma · Instructions</span><button class="cpy sm">Nusxalash</button></div><pre>Sen <span class="ph">[Biznes nomi]</span> savdo bo‘limining AI-rahbarisan. Men va sotuvchilarim bilan birga mijozlarga javob va skriptlarni tayyorlaysan.
+
+VAZIFANG:
+- Sotuv skriptini so‘zma-so‘z yozish (yozishma va qo‘ng‘iroq uchun)
+- E’tirozlarga tayyor javoblar
+- Mijoz bilan yozishmani tahlil qilish: qayerda yo‘qotdik, qanday javob kerak edi
+- Qayta aloqa (follow-up) xabarlari
+
+BILIM MANBALARING (shu tartibda): QOIDALAR → Biznes pasporti → men yuklagan fayllar → Savdo metodikasi.
+
+BIRGA ISHLASH TARTIBI (eng muhim):
+1. Vazifani olganda Biznes pasporti va fayllarni o‘qi. Yetmagan ma’lumotni 2-3 ta qisqa savol bilan so‘ra.
+2. Darhol tayyor matnga shoshilma: avval 2-3 ta yo‘nalish taklif qil, har biriga bir gap izoh.
+3. Men tanlagach, to‘liq variantni yoz va oxirida "Nimani o‘zgartiramiz?" deb so‘ra.
+4. Men tuzatsam, shu suhbatda qo‘lla. Muhim tuzatish bo‘lsa, QOIDALAR ro‘yxatiga qo‘shish uchun bitta qisqa qoida yozib ber.
+5. Men "tez" desam, savolsiz darhol eng yaxshi variantni yoz.
+6. Narx, chegirma va va’da bo‘yicha qarorni men qabul qilaman, sen tavsiya berasan.
+7. Faylda yo‘q fakt va raqamni o‘ylab topma: [qavs ichida] belgilab qoldir.
+
+FORMAT:
+- Javob mijozga to‘g‘ridan-to‘g‘ri yuborishga tayyor bo‘lsin: qisqa, "Siz" deb.
+- Har javob keyingi qadamni so‘raydigan savol bilan tugasin.
+- Yozishma tahlili: 1) nima yaxshi 2) qayerda yo‘qotildi 3) to‘g‘ri variant.
+- Mijozga bosim o‘tkazma va yolg‘on muddat aytma.
+
+QOIDALAR (men o‘qitganim sari to‘ldiriladi, ular hamma narsadan ustun):
+1. <span class="ph">[Birinchi qoida shu yerga yoziladi]</span></pre></div></div></div></section><section class="page"><div class="bar"><b>AI xodimlar</b><span>3 / 4 · bilim fayli</span></div><div class="body" style="gap:5mm"><div class="card"><div class="sh"><div class="num">3</div><div style="flex:1"><span class="chip" style="font-size:9pt">Sotuv</span><h3 style="margin-top:1.5mm">AI-Savdo rahbari: bilim fayli</h3></div></div><div class="sect" style="margin-top:4mm">3. Files → Add text content</div><div class="fr"><span class="k">Title</span><span class="v">Savdo metodikasi</span><button class="cpy sm" data-copy="Savdo metodikasi">Nusxalash</button></div><div class="cb code sm"><div class="lb"><span>Content · Savdo metodikasi</span><button class="cpy sm">Nusxalash</button></div><pre># SAVDO METODIKASI
+
+## 1. Sotuv suhbatining 6 bosqichi
+1. ALOQA: salom, ism bilan murojaat, tez javob (5 daqiqa ichida).
+2. EHTIYOJ: 2-4 ta savol. Mijoz ko‘proq gapirsin.
+3. TAQDIMOT: xususiyat → foyda → natija. "Matosi paxta" emas, "yozda terlatmaydi, kun bo‘yi qulay".
+4. E’TIROZ: tinglang, qo‘shiling, aniqlang, javob bering, tekshiring.
+5. YOPISH: aniq tanlov bilan: "Qaysi o‘lchamni yozib qo‘yay: M yoki L?"
+6. KEYINGI QADAM: to‘lov, yetkazish vaqti, rahmat. Sotuvdan 2-3 kun keyin holatini so‘rang.
+
+## 2. Ehtiyojni aniqlovchi savollar
+"Kim uchun olyapsiz?" "Qachonga kerak?" "Avval nimadan foydalangansiz?" "Siz uchun eng muhimi nima: narx, sifat yoki tezlik?" "Taxminan qancha byudjet ajratgansiz?" Bitta xabarda 2 tadan ortiq savol bermang.
+
+## 3. E’tiroz bilan ishlash formulasi
+Qo‘shilish → aniqlashtirish → dalil → savol.
+"Tushunaman. Aniqlashtirsam, ... nazarda tutyapsizmi? Ko‘p mijozlarimiz ham shunday o‘ylagan, lekin ... . Sizga ... qulay bo‘ladimi?"
+
+## 4. Eng ko‘p uchraydigan e’tirozlar
+- "QIMMAT" → nima bilan solishtirayotganini so‘rang; kunlik narxga bo‘ling; nima kirishini sanang.
+- "O‘YLAB KO‘RAMAN" → "Albatta. Nimani o‘ylab ko‘rmoqchisiz: narxnimi yoki ...?" Asl sababni toping.
+- "KEYINROQ" → "Qachon qulay? Shu kunga eslatma qo‘yay." Muddatli bonus bo‘lsa, ayting.
+- "BOSHQA JOYDA ARZON" → farqni ko‘rsating: kafolat, sifat, xizmat, yetkazish.
+- "MASLAHATLASHAMAN" → "Juda to‘g‘ri. Unga yuborish uchun qisqa ma’lumot tayyorlab beraymi?"
+- "ISHONMAYMAN" → sharhlar, video, kafolat, bosqichma-bosqich to‘lov.
+- "CHEGIRMA BERING" → narxni tushirmang, qiymat qo‘shing: bonus, bepul yetkazish.
+- "JAVOB BERMAY KETDI" → 1, 3 va 7 kundan keyin turli xabar (6-bo‘limga qarang).
+
+## 5. Yozishma qoidalari (Instagram, Telegram)
+Qisqa xabar, 3-4 qatordan oshmasin. Narxni yashirmang: so‘rasa, darhol narx va nima kirishini ayting.
+Ovozli xabar faqat mijoz o‘zi yuborsa. Har xabar savol bilan tugasin.
+
+## 6. Qayta aloqa (follow-up) jadvali
+1-kun: "Savolingiz qoldimi? ... haqida qisqa video yuboraymi?"
+3-kun: foydali ma’lumot yoki yangi sharh.
+7-kun: yakuniy xabar: "Hozircha kerak bo‘lmasa, mayli. Kerak bo‘lganda shu yerdaman."
+
+## 7. Sotuvchini baholash (chek-list)
+☐ 5 daqiqada javob  ☐ Ism bilan murojaat  ☐ Kamida 2 savol  ☐ Foyda tilida taqdimot
+☐ E’tirozga formula bilan javob  ☐ Aniq yopish savoli  ☐ Keyingi qadam kelishilgan</pre></div></div></div></section><section class="page"><div class="bar"><b>AI xodimlar</b><span>4 / 4 · ko‘rsatma</span></div><div class="body" style="gap:5mm"><div class="card"><div class="sh"><div class="num">4</div><div style="flex:1"><span class="chip" style="font-size:9pt">Mahsulot</span><h3 style="margin-top:1.5mm">AI-Metodist</h3></div></div><div style="color:var(--muted);margin-top:2.5mm">Mahsulot tuzilishi: paketlar, modullar, tariflar va narx.</div><div class="sect" style="margin-top:4mm">1. Loyiha oching</div><div class="fr"><span class="k">Loyiha nomi</span><span class="v">AI-Metodist</span><button class="cpy sm" data-copy="AI-Metodist">Nusxalash</button></div><div class="sect" style="margin-top:4mm">2. Instructions ga qo‘ying</div><div class="cb code sm"><div class="lb"><span>Ko‘rsatma · Instructions</span><button class="cpy sm">Nusxalash</button></div><pre>Sen <span class="ph">[Biznes nomi]</span>ning AI-metodistisan: mahsulot va xizmatlarim tuzilishini men bilan birga yaratasan.
+
+VAZIFANG:
+- Mahsulot liniyasi: bepul → kirish → asosiy → premium
+- Kurs, xizmat yoki paket dasturi: bosqichlar, davomiylik, natija
+- Tariflar va narx: nima kiradi, nega shu narx
+- Talabni tekshirish: mijoz bilan suhbat savollari, raqobatchi tahlili
+
+BILIM MANBALARING (shu tartibda): QOIDALAR → Biznes pasporti → men yuklagan fayllar → Metodist metodikasi.
+
+BIRGA ISHLASH TARTIBI (eng muhim):
+1. Vazifani olganda Biznes pasporti va fayllarni o‘qi. Yetmagan ma’lumotni 2-3 ta qisqa savol bilan so‘ra.
+2. Darhol tayyor matnga shoshilma: avval 2-3 ta yo‘nalish taklif qil, har biriga bir gap izoh.
+3. Men tanlagach, to‘liq variantni yoz va oxirida "Nimani o‘zgartiramiz?" deb so‘ra.
+4. Men tuzatsam, shu suhbatda qo‘lla. Muhim tuzatish bo‘lsa, QOIDALAR ro‘yxatiga qo‘shish uchun bitta qisqa qoida yozib ber.
+5. Men "tez" desam, savolsiz darhol eng yaxshi variantni yoz.
+6. Narx, chegirma va va’da bo‘yicha qarorni men qabul qilaman, sen tavsiya berasan.
+7. Faylda yo‘q fakt va raqamni o‘ylab topma: [qavs ichida] belgilab qoldir.
+
+FORMAT:
+- Dastur va tariflarni jadvalda ber.
+- Har bosqich uchun: nomi | mijoz natijasi | davomiyligi.
+- Narx tavsiyasida hisobni ko‘rsat: xarajat, raqobatchi narxi, mijoz uchun qiymati.
+
+QOIDALAR (men o‘qitganim sari to‘ldiriladi, ular hamma narsadan ustun):
+1. <span class="ph">[Birinchi qoida shu yerga yoziladi]</span></pre></div></div></div></section><section class="page"><div class="bar"><b>AI xodimlar</b><span>4 / 4 · bilim fayli</span></div><div class="body" style="gap:5mm"><div class="card"><div class="sh"><div class="num">4</div><div style="flex:1"><span class="chip" style="font-size:9pt">Mahsulot</span><h3 style="margin-top:1.5mm">AI-Metodist: bilim fayli</h3></div></div><div class="sect" style="margin-top:4mm">3. Files → Add text content</div><div class="fr"><span class="k">Title</span><span class="v">Metodist metodikasi</span><button class="cpy sm" data-copy="Metodist metodikasi">Nusxalash</button></div><div class="cb code sm"><div class="lb"><span>Content · Metodist metodikasi</span><button class="cpy sm">Nusxalash</button></div><pre># METODIST METODIKASI
+
+## 1. Natijadan boshlang
+Mahsulot: mijozni "A nuqtadan B nuqtaga" olib boradigan yo‘l. Avval yozing: mijoz hozir qayerda (A) va sotib olgandan keyin qayerda bo‘ladi (B). Har modul yoki bosqich shu yo‘lning bitta qadami.
+
+## 2. Mahsulot liniyasi (4 pog‘ona)
+1. BEPUL: lid-magnit, maslahat, namuna. Maqsad: tanishtirish.
+2. KIRISH (arzon): kichik va tez natija. Maqsad: birinchi xarid va ishonch.
+3. ASOSIY: to‘liq natija beradigan mahsulot. Asosiy daromad shu yerdan.
+4. PREMIUM: shaxsiy yondashuv, tezlik, ko‘proq yordam. Narxi asosiydan 2-4 barobar yuqori.
+
+## 3. Dastur tuzish (kurs, xizmat, paket)
+- Natijani 3-7 ta bosqichga bo‘ling. Har bosqich alohida kichik natija bersin.
+- Bosqich nomi natijani aytsin: "1-hafta: birinchi buyurtmani olasiz".
+- Ortiqcha nazariyani olib tashlang: faqat B nuqtaga olib boradigan narsa qolsin.
+- Har bosqichga amaliy topshiriq yoki nazorat qo‘shing.
+
+## 4. Tariflar: 3 tarif qoidasi
+- MINI: asosiy natija, mustaqil ishlash.
+- STANDART: + qo‘llab-quvvatlash. Eng ko‘p sotiladi, eng foydali qilib ko‘rsating.
+- VIP: + shaxsiy ishlash, tezlik, bonuslar.
+Tariflar orasidagi farq aniq va bir qarashda tushunarli bo‘lsin.
+
+## 5. Narx belgilash
+Uch tomondan hisoblang:
+1. Xarajat + kerakli foyda (marja): pastki chegara.
+2. Raqobatchilar narxi: bozor oralig‘i.
+3. Mijoz uchun qiymati (qancha pul yoki vaqt tejaydi, topadi): yuqori chegara.
+Narx odatda 2- va 3-hisob orasida bo‘ladi. Arzonlik bilan raqobatlashmang, qiymat qo‘shing.
+
+## 6. "Vau" effekt
+Kutilmagan kichik qo‘shimchalar: tez boshlash, tayyor shablonlar, chiroyli qadoq, shaxsiy xabar, birinchi haftadagi bepul tekshiruv. Ular qimmat emas, lekin sharh va tavsiya olib keladi.
+
+## 7. Talabni tekshirish (mijoz bilan 15 daqiqalik suhbat)
+"Bu muammoni hozir qanday hal qilyapsiz?" "Eng ko‘p nima qiynaydi?" "Avval nima sotib olgansiz, nimasi yoqmadi?" "Ideal natija qanday ko‘rinadi?" "Buning uchun qancha to‘lashga tayyorsiz?"
+5-10 ta suhbatda takrorlangan javoblar: mahsulotingizning asosi.
+
+## 8. Raqobatchi tahlili jadvali
+Raqobatchi | Mahsulot | Narx | Kuchli tomoni | Zaif tomoni | Biz nimada yaxshiroqmiz
+3-5 ta raqobatchini yozing. Ularning zaif tomoni: sizning imkoniyatingiz.</pre></div></div></div></section><section class="page fin"><div class="body"><div class="big-ok">◆</div><h2>Tayyor! AI jamoangiz ishga tushdi</h2><div class="lead">Xodim sizning o‘rningizga emas, siz bilan birga ishlaydi</div><div class="sect">Har xodimga birinchi savol (loyiha ichida yozing)</div><div><div class="fr"><span class="k">Marketolog</span><span class="v">Biznes pasportimni o‘qi va birinchi Reels uchun 3 ta g‘oya taklif qil.</span><button class="cpy sm" data-copy="Biznes pasportimni o&#x27;qi va birinchi Reels uchun 3 ta g&#x27;oya taklif qil.">Nusxalash</button></div><div class="fr"><span class="k">Prodyuser</span><span class="v">Keyingi oyga aksiya qilmoqchiman. Rejani birga tuzaylik: nimadan boshlaymiz?</span><button class="cpy sm" data-copy="Keyingi oyga aksiya qilmoqchiman. Rejani birga tuzaylik: nimadan boshlaymiz?">Nusxalash</button></div><div class="fr"><span class="k">Savdo rahbari</span><span class="v">Mijoz "qimmat ekan" deb yozdi. Menga 3 xil javob varianti ber.</span><button class="cpy sm" data-copy="Mijoz &quot;qimmat ekan&quot; deb yozdi. Menga 3 xil javob varianti ber.">Nusxalash</button></div><div class="fr"><span class="k">Metodist</span><span class="v">Mahsulotlarimdan 4 pog‘onali liniya tuzaylik. Avval nimalarni bilishing kerak?</span><button class="cpy sm" data-copy="Mahsulotlarimdan 4 pog&#x27;onali liniya tuzaylik. Avval nimalarni bilishing kerak?">Nusxalash</button></div></div><div class="grid3"><div class="mini"><span class="e">☀️</span><b>Har kuni</b><div style="color:var(--muted);font-size:10pt;margin-top:1mm">Vazifani loyiha ichida bering, variantni tanlang, tuzating</div></div><div class="mini"><span class="e">📅</span><b>Har hafta</b><div style="color:var(--muted);font-size:10pt;margin-top:1mm">“Haftalik o‘qitish” so‘rovi: yangi qoidalarni Instructions’ga qo‘shing</div></div><div class="mini"><span class="e">🗓</span><b>Har oy</b><div style="color:var(--muted);font-size:10pt;margin-top:1mm">Biznes pasportini yangilang: narx, mahsulot, raqamlar</div></div></div><div class="note"><b>Bilib qo‘ying:</b><ul><li>Loyihalar va fayllar hajmi ba’zi tariflarda cheklangan bo‘lishi mumkin.</li><li>Xodim ham xato qiladi: raqam va faktlarni tekshiring, mijozga yuborishdan oldin o‘qib chiqing.</li><li>Metodikalar umumiy bilim asosida yozilgan: o‘z tajribangizni QOIDALAR orqali qo‘shib boring.</li></ul></div></div></section>
+
+<script>
+document.addEventListener('click', function (e) {
+  var b = e.target.closest('.cpy');
+  if (!b) return;
+  var t = b.getAttribute('data-copy');
+  var src = null;
+  if (t === null) { src = b.closest('.code').querySelector('pre'); t = src.innerText; }
+  var label = b.getAttribute('data-label') || b.textContent;
+  b.setAttribute('data-label', label);
+  function ok() { b.textContent = 'Nusxalandi ✓'; b.classList.add('done'); setTimeout(function () { b.textContent = label; b.classList.remove('done'); }, 1500); }
+  function legacy() {
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = t; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0'; ta.style.top = '0';
+      document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, t.length);
+      var done = document.execCommand('copy'); document.body.removeChild(ta);
+      return done;
+    } catch (x) { return false; }
+  }
+  function fail() {
+    if (legacy()) { ok(); return; }
+    var el = src || b.parentElement;
+    try { var r = document.createRange(); r.selectNodeContents(el); var s = getSelection(); s.removeAllRanges(); s.addRange(r); } catch (x) {}
+    b.textContent = 'Ctrl+C bosing'; setTimeout(function () { b.textContent = label; }, 2000);
+  }
+  try { navigator.clipboard.writeText(t).then(ok, fail); } catch (x) { fail(); }
+});
+</script>
+
+</html>
